@@ -68,14 +68,15 @@ public class RoseBootFilter extends OncePerRequestFilter {
     private WebApplicationContext context;
 
     @Override
-    public void doFilterInternal(HttpServletRequest httpRequest, HttpServletResponse httpResponse,
-                                 FilterChain filterChain) throws ServletException, IOException {
-        // 创建RequestPath对象，用于记录对地址解析的结果
-        final RequestPath requestPath = new RequestPath(httpRequest);
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                 FilterChain chain) throws ServletException, IOException {
+
+        // 创建 RequestPath 对象，用于记录对地址解析的结果
+        final RequestPath requestPath = new RequestPath(request);
 
         // // 简单、快速判断本次请求，如果不应由Rose执行，返回true
         // if (quicklyPass(requestPath)) {
-        // notMatched(filterChain, httpRequest, httpResponse, requestPath);
+        // notMatched(chain, request, response, requestPath);
         // return;
         // }
 
@@ -83,7 +84,7 @@ public class RoseBootFilter extends OncePerRequestFilter {
         boolean matched = false;
         try {
             // rose 对象代表Rose框架对一次请求的执行：一朵玫瑰出墙来
-            final Rose rose = new Rose(modules, mappingTree, httpRequest, httpResponse, requestPath);
+            final Rose rose = new Rose(modules, mappingTree, request, response, requestPath);
 
             // 对请求进行匹配、处理、渲染以及渲染后的操作，如果找不到映配则返回false
             matched = rose.start();
@@ -94,7 +95,7 @@ public class RoseBootFilter extends OncePerRequestFilter {
 
         // 非Rose的请求转发给WEB容器的其他组件处理，而且不放到上面的try-catch块中
         if (!matched) {
-            notMatched(filterChain, httpRequest, httpResponse, requestPath);
+            notMatched(chain, request, response, requestPath);
         }
     }
 

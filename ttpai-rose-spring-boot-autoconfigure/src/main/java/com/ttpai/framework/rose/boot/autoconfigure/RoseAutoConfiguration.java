@@ -2,6 +2,7 @@ package com.ttpai.framework.rose.boot.autoconfigure;
 
 import com.ttpai.framework.rose.boot.autoconfigure.filter.RoseBootFilter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,18 +14,26 @@ import java.util.EnumSet;
 
 /**
  * 1. 支持 applicationContext*.xml 自动发现
+ * -- 1.1 applicationContext-rose.xml Rose Web
+ * -- 1.2 applicationContext-jade.xml Rose Dao
+ *
  * 2. 配置 roseBootFilterRegistration
+ *
+ * 3. 启动自动配置 @EnableAutoConfiguration，无需使用
  */
 @Configuration
 @ImportResource("classpath*:applicationContext*.xml")
 public class RoseAutoConfiguration {
 
     /**
-     * 自定义过滤的 url
+     * 自定义过滤的 Url，可自定义哪些链接经过 Rose 过滤器
      */
     @Value("${rose.boot.filter.patterns:/*}")
     private Collection<String> patterns;
 
+    /**
+     * 自定义 Rose 过滤器
+     */
     @Bean
     public RoseBootFilter roseBootFilter() {
         return new RoseBootFilter();

@@ -41,14 +41,14 @@ public class RoseBootFilter extends GenericFilterBean {
         this.roseTree = roseTree;
     }
 
-    private final IgnoredPath[] ignoredPaths = new IgnoredPath[]{
+    private final IgnoredPath[] ignoredPaths = new IgnoredPath[] {
             new IgnoredPathStarts(RoseConstants.VIEWS_PATH_WITH_END_SEP),
             new IgnoredPathEquals("/favicon.ico")
     };
 
-
     @Override
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse resp,
+                         FilterChain chain) throws IOException, ServletException {
         if (!(req instanceof HttpServletRequest && resp instanceof HttpServletResponse)) {
             chain.doFilter(req, resp);
             return;
@@ -70,7 +70,8 @@ public class RoseBootFilter extends GenericFilterBean {
         boolean matched = false;
         try {
             // rose 对象代表Rose框架对一次请求的执行：一朵玫瑰出墙来
-            final Rose rose = new Rose(roseTree.getModules(), roseTree.getMappingTree(), request, response, requestPath);
+            final Rose rose = new Rose(roseTree.getModules(), roseTree.getMappingTree(), request, response,
+                    requestPath);
 
             // 对请求进行匹配、处理、渲染以及渲染后的操作，如果找不到映配则返回false
             matched = rose.start();
@@ -85,7 +86,6 @@ public class RoseBootFilter extends GenericFilterBean {
         }
     }
 
-
     private boolean quicklyPass(final RequestPath requestPath) {
         for (IgnoredPath p : ignoredPaths) {
             if (p.hit(requestPath)) {
@@ -94,7 +94,6 @@ public class RoseBootFilter extends GenericFilterBean {
         }
         return false;
     }
-
 
     private void throwServletException(RequestPath requestPath, Throwable exception) throws ServletException {
         String msg = requestPath.getMethod() + " " + requestPath.getUri();
@@ -122,16 +121,15 @@ public class RoseBootFilter extends GenericFilterBean {
         filterChain.doFilter(httpRequest, httpResponse);
     }
 
-
     protected void removeMvc(List<Module> modules) {
         final Iterator<Module> iterator = modules.iterator();
-        for (; iterator.hasNext(); ) {
+        for (; iterator.hasNext();) {
             final Module module = iterator.next();
 
             final List<ControllerRef> rmControllers = new ArrayList<>();
             final List<ControllerRef> controllers = module.getControllers();
             final Iterator<ControllerRef> controllerRefIterator = controllers.iterator();
-            for (; controllerRefIterator.hasNext(); ) {
+            for (; controllerRefIterator.hasNext();) {
                 final ControllerRef controllerRef = controllerRefIterator.next();
                 final Class<?> controllerClass = controllerRef.getControllerClass();
                 if (null != controllerClass.getAnnotation(Controller.class)
@@ -148,6 +146,5 @@ public class RoseBootFilter extends GenericFilterBean {
 
         }
     }
-
 
 }

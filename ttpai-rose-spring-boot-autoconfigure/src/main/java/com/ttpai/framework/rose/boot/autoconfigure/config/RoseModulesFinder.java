@@ -31,7 +31,7 @@ import java.util.List;
 
 /**
  * @see RoseFilter#initFilterBean()
- * * * * * * * *
+ *      * * * * * * *
  * @see RoseFilter#prepareRootApplicationContext()
  * @see RoseFilter#prepareModules(WebApplicationContext)
  * @see RoseFilter#prepareMappingTree(List)
@@ -57,7 +57,6 @@ public class RoseModulesFinder implements InitializingBean {
     private final Class<? extends ModulesBuilder> modulesBuilderClass = ModulesBuilderImpl.class;
 
     private final InstructionExecutor instructionExecutor = new InstructionExecutorImpl();
-
 
     /**
      * @see RoseFilter#prepareModules(WebApplicationContext)

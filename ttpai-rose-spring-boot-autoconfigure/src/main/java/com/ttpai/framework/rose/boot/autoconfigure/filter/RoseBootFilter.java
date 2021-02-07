@@ -23,6 +23,7 @@ import net.paoding.rose.web.impl.thread.RootEngine;
 import net.paoding.rose.web.impl.thread.Rose;
 import net.paoding.rose.web.instruction.InstructionExecutor;
 import net.paoding.rose.web.instruction.InstructionExecutorImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.env.Environment;
@@ -32,7 +33,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.NestedServletException;
 
-import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
@@ -49,7 +49,6 @@ import java.util.List;
  * @see RoseWebAppContext
  */
 @Slf4j
-@Configuration
 public class RoseBootFilter extends OncePerRequestFilter {
 
     private final LoadScope load = new LoadScope("", "controllers");
@@ -64,7 +63,10 @@ public class RoseBootFilter extends OncePerRequestFilter {
 
     MappingNode mappingTree;
 
-    @Resource
+    /**
+     * 这里不能使用 @Resource 注解，否则可能会触发 Web 容器自身的注入机制
+     */
+    @Autowired
     private WebApplicationContext context;
 
     @Override
@@ -148,13 +150,13 @@ public class RoseBootFilter extends OncePerRequestFilter {
 
     protected void removeMvc(List<Module> modules) {
         final Iterator<Module> iterator = modules.iterator();
-        for (; iterator.hasNext();) {
+        for (; iterator.hasNext(); ) {
             final Module module = iterator.next();
 
             final List<ControllerRef> rmControllers = new ArrayList<>();
             final List<ControllerRef> controllers = module.getControllers();
             final Iterator<ControllerRef> controllerRefIterator = controllers.iterator();
-            for (; controllerRefIterator.hasNext();) {
+            for (; controllerRefIterator.hasNext(); ) {
                 final ControllerRef controllerRef = controllerRefIterator.next();
                 final Class<?> controllerClass = controllerRef.getControllerClass();
                 if (null != controllerClass.getAnnotation(Controller.class)

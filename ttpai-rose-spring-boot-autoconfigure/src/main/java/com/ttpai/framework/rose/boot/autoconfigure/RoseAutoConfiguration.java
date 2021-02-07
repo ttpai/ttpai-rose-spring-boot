@@ -18,8 +18,6 @@ import java.util.EnumSet;
  * -- 1.2 applicationContext-jade.xml Rose Dao
  *
  * 2. 配置 roseBootFilterRegistration
- *
- * 3. 启动自动配置 @EnableAutoConfiguration，无需使用
  */
 @Configuration
 @ImportResource("classpath*:applicationContext*.xml")

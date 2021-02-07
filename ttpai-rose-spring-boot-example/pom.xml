@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ttpai-rose-spring-boot-example</artifactId>
+    <packaging>war</packaging>
 
     <properties>
     </properties>

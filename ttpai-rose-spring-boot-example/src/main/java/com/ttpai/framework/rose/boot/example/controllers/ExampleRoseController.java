@@ -5,6 +5,8 @@ import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
 import org.apache.commons.lang.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Path("/rose")
 public class ExampleRoseController {
 
@@ -19,6 +21,12 @@ public class ExampleRoseController {
             throw new IllegalArgumentException(message);
         }
         return "@【Return】缺少 m 参数";
+    }
+
+    @Get("/jsp")
+    public String jsp(HttpServletRequest request) {
+        request.setAttribute("message", System.currentTimeMillis());
+        return "index";
     }
 
 }

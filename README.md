@@ -54,7 +54,7 @@ public class Application extends SpringBootServletInitializer {
 
 ## TODO
 
-- RoseBootFilter 会初始化两次
+- 【√】RoseBootFilter 会初始化两次
 - 多数据源时必须增加 `primary="true"`
 - 自动屏蔽 web.xml 中的 Rose 配置
 - 【×】无需增加 Spring Boot 启动类

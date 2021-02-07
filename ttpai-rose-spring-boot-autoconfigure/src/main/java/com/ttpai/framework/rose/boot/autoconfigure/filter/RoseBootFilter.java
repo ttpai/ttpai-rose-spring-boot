@@ -14,11 +14,13 @@ import net.paoding.rose.web.impl.module.Module;
 import net.paoding.rose.web.impl.thread.Rose;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,7 +33,7 @@ import java.util.List;
  * @see RoseWebAppContext
  */
 @Slf4j
-public class RoseBootFilter extends OncePerRequestFilter {
+public class RoseBootFilter extends GenericFilterBean {
 
     private final RoseModulesFinder roseTree;
 
@@ -41,11 +43,19 @@ public class RoseBootFilter extends OncePerRequestFilter {
 
     private final IgnoredPath[] ignoredPaths = new IgnoredPath[]{
             new IgnoredPathStarts(RoseConstants.VIEWS_PATH_WITH_END_SEP),
-            new IgnoredPathEquals("/favicon.ico")};
+            new IgnoredPathEquals("/favicon.ico")
+    };
+
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                 FilterChain chain) throws ServletException, IOException {
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+        if (!(req instanceof HttpServletRequest && resp instanceof HttpServletResponse)) {
+            chain.doFilter(req, resp);
+            return;
+        }
+
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
 
         // 创建 RequestPath 对象，用于记录对地址解析的结果
         final RequestPath requestPath = new RequestPath(request);

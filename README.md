@@ -1,5 +1,5 @@
 
-## 迁移步骤
+## Rose 迁移 Boot 步骤
 
 - 增加 `com.ttpai.framework:ttpai-rose-spring-boot-starter:1.0.0-SNAPSHOT`
 - 删除 `web.xml` 关于 `roseFilter` 的配置

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttpai.framework.rose.boot.example.dao.UserMapper">
+
+
+    <sql id="all_field">
+        Host, User
+    </sql>
+
+    <select id="selectAll" resultType="com.ttpai.framework.rose.boot.example.model.UserVO">
+        select
+        <include refid="all_field"/>
+        from user
+    </select>
+
+
+</mapper>

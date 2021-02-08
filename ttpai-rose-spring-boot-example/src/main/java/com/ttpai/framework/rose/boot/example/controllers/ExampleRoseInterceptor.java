@@ -45,6 +45,6 @@ public class ExampleRoseInterceptor extends ControllerInterceptorAdapter {
      */
     @Override
     public void afterCompletion(Invocation inv, Throwable ex) throws Exception {
-        log.warn("{} afterCompletion", inv.getMethod());
+        log.warn("{} afterCompletion", inv.getMethod(), ex);
     }
 }

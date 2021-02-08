@@ -28,11 +28,13 @@ public class ExampleRoseErrorHandler implements ControllerErrorHandler {
         // 处理 tomcat 容器自带异常报告
         String serverInfo = inv.getApplicationContext().getServletContext().getServerInfo();
         Object state = request.getAttribute(STATUS_CODE_ATTR);
-        if (StringUtils.containsIgnoreCase(serverInfo, APPACHE_TOMCAT) && null != state
-                && "200".equals(state.toString())) {
+        if (StringUtils.containsIgnoreCase(serverInfo, APPACHE_TOMCAT)
+                && null != state && "200".equals(state.toString())) {
             request.removeAttribute(EXCEPTION_TYPE_ATTR);
             request.removeAttribute(EXCEPTION_ATTR);
         }
+
+        log.error("【异常处理器】", ex);
 
         return "@json:【异常处理器】" + ex.getMessage();
     }

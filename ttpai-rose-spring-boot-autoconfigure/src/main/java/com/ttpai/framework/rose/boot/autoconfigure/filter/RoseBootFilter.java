@@ -72,7 +72,7 @@ public class RoseBootFilter extends GenericFilterBean {
             final Rose rose = new Rose(roseTree.getModules(), roseTree.getMappingTree(),
                     request, response, requestPath);
 
-            // 对请求进行匹配、处理、渲染以及渲染后的操作，如果找不到映配则返回false
+            // 对请求进行匹配、处理、渲染以及渲染后的操作，如果找不到映配则返回 false
             matched = rose.start();
         } catch (Throwable exception) {
             throwServletException(requestPath, exception);

@@ -1,4 +1,4 @@
-package com.ttpai.framework.rose.boot.example.controller;
+package com.ttpai.framework.rose.boot.example.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

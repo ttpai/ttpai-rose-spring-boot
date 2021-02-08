@@ -1,11 +1,12 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.ttpai.framework.rose.boot.autoconfigure.RoseAutoConfiguration
 #
-# Rose -> RoseModulesFinder
-net.paoding.rose.web.impl.module.ModulesBuilder=net.paoding.rose.web.impl.module.ModulesBuilderImpl
+# Rose -> RoseModulesFinder，Rose 模块查找器
+# 这里进行扩展： 清除非 Rose 的 Controller
+net.paoding.rose.scanner.ModuleResourceProvider=net.paoding.rose.scanner.BootModuleResourceProvider
 #
 # Rose -> RoseModulesFinder
-net.paoding.rose.scanner.ModuleResourceProvider=net.paoding.rose.scanner.ModuleResourceProviderImpl
+net.paoding.rose.web.impl.module.ModulesBuilder=net.paoding.rose.web.impl.module.ModulesBuilderImpl
 #
 # Rose -> RoseModulesFinder
 net.paoding.rose.web.instruction.InstructionExecutor=net.paoding.rose.web.instruction.InstructionExecutorImpl

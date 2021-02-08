@@ -36,7 +36,6 @@ public class MvcExceptionAdvice {
 
         reqBuilder.append("RequestURL:[").append(request.getRequestURL()).append("]").append(lineEnd);
 
-
         return reqBuilder;
     }
 

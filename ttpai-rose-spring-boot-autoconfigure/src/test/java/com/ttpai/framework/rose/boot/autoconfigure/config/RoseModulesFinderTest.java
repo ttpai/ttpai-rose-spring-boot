@@ -1,6 +1,7 @@
 package com.ttpai.framework.rose.boot.autoconfigure.config;
 
 import net.paoding.rose.web.impl.module.Module;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,6 +16,7 @@ import java.util.List;
  *
  * @author Kail
  */
+@Ignore
 @WebAppConfiguration
 @RunWith(SpringRunner.class)
 public class RoseModulesFinderTest {

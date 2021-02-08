@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * @see RoseFilter#initFilterBean()
- * * * * * * * *
+ *      * * * * * * *
  * @see RoseFilter#prepareRootApplicationContext()
  * @see RoseFilter#prepareModules(WebApplicationContext)
  * @see RoseFilter#prepareMappingTree(List)
@@ -86,7 +86,6 @@ public class RoseModulesFinder implements InitializingBean {
             logger.info("[init/mudule] starting ...");
         }
 
-
         ModuleResourceProvider provider = this.springFactoriesFindFirst(ModuleResourceProvider.class);
 
         if (logger.isInfoEnabled()) {
@@ -132,9 +131,11 @@ public class RoseModulesFinder implements InitializingBean {
     }
 
     protected <T> T springFactoriesFindFirst(Class<T> clazz) {
+
         final List<T> resourceProviders = SpringFactoriesLoader.loadFactories(
                 clazz, Thread.currentThread().getContextClassLoader()
         );
+
         if (resourceProviders.isEmpty()) {
             throw new IllegalArgumentException("SpringFactoriesLoader not Found " + clazz.getName());
         }
@@ -144,6 +145,5 @@ public class RoseModulesFinder implements InitializingBean {
         }
         return instance;
     }
-
 
 }

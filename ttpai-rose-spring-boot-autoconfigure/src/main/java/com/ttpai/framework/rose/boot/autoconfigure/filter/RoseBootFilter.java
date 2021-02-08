@@ -6,12 +6,11 @@ import net.paoding.rose.RoseConstants;
 import net.paoding.rose.RoseFilter;
 import net.paoding.rose.scanning.context.RoseWebAppContext;
 import net.paoding.rose.web.RequestPath;
-import net.paoding.rose.web.impl.mapping.ignored.IgnoredPath;
-import net.paoding.rose.web.impl.mapping.ignored.IgnoredPathEquals;
-import net.paoding.rose.web.impl.mapping.ignored.IgnoredPathStarts;
+import net.paoding.rose.web.impl.mapping.ignored.*;
 import net.paoding.rose.web.impl.module.ControllerRef;
 import net.paoding.rose.web.impl.module.Module;
 import net.paoding.rose.web.impl.thread.Rose;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.GenericFilterBean;
@@ -25,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class RoseBootFilter extends GenericFilterBean {
         this.roseTree = roseTree;
     }
 
-    private final IgnoredPath[] ignoredPaths = new IgnoredPath[]{
+    private IgnoredPath[] ignoredPaths = new IgnoredPath[]{
             new IgnoredPathStarts(RoseConstants.VIEWS_PATH_WITH_END_SEP),
             new IgnoredPathEquals("/favicon.ico")
     };
@@ -126,6 +126,53 @@ public class RoseBootFilter extends GenericFilterBean {
         // 调用其它 Filter
         chain.doFilter(req, resp);
     }
+
+    /**
+     * 自定义忽略的链接
+     */
+    public void setIgnoredPaths(String[] ignoredPathStrings) {
+        List<IgnoredPath> list = new ArrayList<>(ignoredPathStrings.length + 2);
+        for (String ignoredPath : ignoredPathStrings) {
+            ignoredPath = ignoredPath.trim();
+            if (StringUtils.isEmpty(ignoredPath)) {
+                continue;
+            }
+            /*
+             * 忽略所有
+             */
+            if (ignoredPath.equals("*")) {
+                list.add(new IgnoredPathEquals(""));
+                list.add(new IgnoredPathStarts("/"));
+                break;
+            }
+            /*
+             * 正则忽略
+             */
+            if (ignoredPath.startsWith("regex:")) {
+                list.add(new IgnoredPathRegexMatch(ignoredPath.substring("regex:".length())));
+            } else {
+                // 补全
+                if (ignoredPath.length() > 0 && !ignoredPath.startsWith("/") && !ignoredPath.startsWith("*")) {
+                    ignoredPath = "/" + ignoredPath;
+                }
+                //
+                if (ignoredPath.endsWith("*")) {
+                    list.add(new IgnoredPathStarts(ignoredPath.substring(0, ignoredPath.length() - 1)));
+                } else if (ignoredPath.startsWith("*")) {
+                    list.add(new IgnoredPathEnds(ignoredPath.substring(1)));
+                } else {
+                    list.add(new IgnoredPathEquals(ignoredPath));
+                }
+            }
+        }
+
+        IgnoredPath[] paths = Arrays.copyOf(this.ignoredPaths, this.ignoredPaths.length + list.size());
+        for (int i = this.ignoredPaths.length; i < paths.length; i++) {
+            paths[i] = list.get(i - this.ignoredPaths.length);
+        }
+        this.ignoredPaths = paths;
+    }
+
 
     protected void removeMvc(List<Module> modules) {
         final Iterator<Module> iterator = modules.iterator();

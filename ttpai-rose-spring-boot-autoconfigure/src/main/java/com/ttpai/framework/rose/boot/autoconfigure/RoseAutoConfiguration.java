@@ -2,6 +2,7 @@ package com.ttpai.framework.rose.boot.autoconfigure;
 
 import com.ttpai.framework.rose.boot.autoconfigure.config.RoseModulesFinder;
 import com.ttpai.framework.rose.boot.autoconfigure.filter.RoseBootFilter;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -10,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 import javax.servlet.DispatcherType;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.EnumSet;
 
 /**
@@ -28,7 +29,10 @@ public class RoseAutoConfiguration {
      * 自定义过滤的 Url，可自定义哪些链接经过 Rose 过滤器
      */
     @Value("${rose.boot.filter.patterns:/*}")
-    private Collection<String> patterns;
+    private String patterns;
+
+    @Value("${rose.boot.filter.ignore.paths:}")
+    private String ignorePaths;
 
     @Bean
     @ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
@@ -42,6 +46,10 @@ public class RoseAutoConfiguration {
     @Bean
     @ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
     public RoseBootFilter roseBootFilter(RoseModulesFinder modules) {
+        final RoseBootFilter roseBootFilter = new RoseBootFilter(modules);
+        if (StringUtils.isNotBlank(ignorePaths)) {
+            roseBootFilter.setIgnoredPaths(ignorePaths.split(","));
+        }
         return new RoseBootFilter(modules);
     }
 
@@ -53,7 +61,9 @@ public class RoseAutoConfiguration {
     public FilterRegistrationBean roseBootFilterRegistration(RoseBootFilter filter) {
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setFilter(filter);
-        bean.setUrlPatterns(patterns);
+        //
+        bean.setUrlPatterns(Arrays.asList(patterns.split(",")));
+        //
         bean.setDispatcherTypes(EnumSet.of(
                 DispatcherType.REQUEST,
                 DispatcherType.FORWARD,

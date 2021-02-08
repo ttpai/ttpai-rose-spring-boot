@@ -11,9 +11,6 @@
 
     <artifactId>ttpai-rose-spring-boot-autoconfigure</artifactId>
 
-    <properties>
-    </properties>
-
     <dependencies>
 
         <dependency>

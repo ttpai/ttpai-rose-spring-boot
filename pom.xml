@@ -21,6 +21,8 @@
     </modules>
 
     <properties>
+        <!-- 无需依赖管理 -->
+        <ttpai-dependencies.skip>true</ttpai-dependencies.skip>
     </properties>
 
     <repositories>

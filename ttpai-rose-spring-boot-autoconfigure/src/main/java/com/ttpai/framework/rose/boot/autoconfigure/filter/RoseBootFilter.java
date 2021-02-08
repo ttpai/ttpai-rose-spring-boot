@@ -41,7 +41,7 @@ public class RoseBootFilter extends GenericFilterBean {
         this.roseTree = roseTree;
     }
 
-    private IgnoredPath[] ignoredPaths = new IgnoredPath[]{
+    private IgnoredPath[] ignoredPaths = new IgnoredPath[] {
             new IgnoredPathStarts(RoseConstants.VIEWS_PATH_WITH_END_SEP),
             new IgnoredPathEquals("/favicon.ico")
     };
@@ -196,17 +196,15 @@ public class RoseBootFilter extends GenericFilterBean {
         }
     }
 
-
-
     protected void removeMvc(List<Module> modules) {
         final Iterator<Module> iterator = modules.iterator();
-        for (; iterator.hasNext(); ) {
+        for (; iterator.hasNext();) {
             final Module module = iterator.next();
 
             final List<ControllerRef> rmControllers = new ArrayList<>();
             final List<ControllerRef> controllers = module.getControllers();
             final Iterator<ControllerRef> controllerRefIterator = controllers.iterator();
-            for (; controllerRefIterator.hasNext(); ) {
+            for (; controllerRefIterator.hasNext();) {
                 final ControllerRef controllerRef = controllerRefIterator.next();
                 final Class<?> controllerClass = controllerRef.getControllerClass();
                 if (null != controllerClass.getAnnotation(Controller.class)

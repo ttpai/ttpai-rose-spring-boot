@@ -133,8 +133,7 @@ public class RoseModulesFinder implements InitializingBean {
     protected <T> T springFactoriesFindFirst(Class<T> clazz) {
 
         final List<T> resourceProviders = SpringFactoriesLoader.loadFactories(
-                clazz, Thread.currentThread().getContextClassLoader()
-        );
+                clazz, Thread.currentThread().getContextClassLoader());
 
         if (resourceProviders.isEmpty()) {
             throw new IllegalArgumentException("SpringFactoriesLoader not Found " + clazz.getName());

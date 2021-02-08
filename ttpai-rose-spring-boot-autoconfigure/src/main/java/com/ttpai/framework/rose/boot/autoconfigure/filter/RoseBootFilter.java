@@ -7,12 +7,8 @@ import net.paoding.rose.RoseFilter;
 import net.paoding.rose.scanning.context.RoseWebAppContext;
 import net.paoding.rose.web.RequestPath;
 import net.paoding.rose.web.impl.mapping.ignored.*;
-import net.paoding.rose.web.impl.module.ControllerRef;
-import net.paoding.rose.web.impl.module.Module;
 import net.paoding.rose.web.impl.thread.Rose;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.util.NestedServletException;
 
@@ -25,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -41,7 +36,7 @@ public class RoseBootFilter extends GenericFilterBean {
         this.roseTree = roseTree;
     }
 
-    private IgnoredPath[] ignoredPaths = new IgnoredPath[] {
+    private IgnoredPath[] ignoredPaths = new IgnoredPath[]{
             new IgnoredPathStarts(RoseConstants.VIEWS_PATH_WITH_END_SEP),
             new IgnoredPathEquals("/favicon.ico")
     };
@@ -57,6 +52,9 @@ public class RoseBootFilter extends GenericFilterBean {
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
+
+        // pipe 支持
+        this.supportsRosePipe(request);
 
         // 创建 RequestPath 对象，用于记录对地址解析的结果
         final RequestPath requestPath = new RequestPath(request);
@@ -133,37 +131,7 @@ public class RoseBootFilter extends GenericFilterBean {
     public void setIgnoredPaths(String[] ignoredPathStrings) {
         List<IgnoredPath> list = new ArrayList<>(ignoredPathStrings.length + 2);
         for (String ignoredPath : ignoredPathStrings) {
-            ignoredPath = ignoredPath.trim();
-            if (StringUtils.isEmpty(ignoredPath)) {
-                continue;
-            }
-            /*
-             * 忽略所有
-             */
-            if (ignoredPath.equals("*")) {
-                list.add(new IgnoredPathEquals(""));
-                list.add(new IgnoredPathStarts("/"));
-                break;
-            }
-            /*
-             * 正则忽略
-             */
-            if (ignoredPath.startsWith("regex:")) {
-                list.add(new IgnoredPathRegexMatch(ignoredPath.substring("regex:".length())));
-            } else {
-                // 补全
-                if (ignoredPath.length() > 0 && !ignoredPath.startsWith("/") && !ignoredPath.startsWith("*")) {
-                    ignoredPath = "/" + ignoredPath;
-                }
-                //
-                if (ignoredPath.endsWith("*")) {
-                    list.add(new IgnoredPathStarts(ignoredPath.substring(0, ignoredPath.length() - 1)));
-                } else if (ignoredPath.startsWith("*")) {
-                    list.add(new IgnoredPathEnds(ignoredPath.substring(1)));
-                } else {
-                    list.add(new IgnoredPathEquals(ignoredPath));
-                }
-            }
+            list.addAll(this.parseIgnoredPath(ignoredPath));
         }
 
         IgnoredPath[] paths = Arrays.copyOf(this.ignoredPaths, this.ignoredPaths.length + list.size());
@@ -171,6 +139,50 @@ public class RoseBootFilter extends GenericFilterBean {
             paths[i] = list.get(i - this.ignoredPaths.length);
         }
         this.ignoredPaths = paths;
+    }
+
+    /**
+     * 解析忽略的链接
+     *
+     * @param ignoredPath [*]、[regex:/asd/.+] 、[/asd/asd*]、[*asd/asd]
+     */
+    protected List<IgnoredPath> parseIgnoredPath(String ignoredPath) {
+        List<IgnoredPath> list = new ArrayList<>(2);
+
+        ignoredPath = ignoredPath.trim();
+        if (StringUtils.isEmpty(ignoredPath)) {
+            return list;
+        }
+        /*
+         * 忽略所有
+         */
+        if (ignoredPath.equals("*")) {
+            list.add(new IgnoredPathEquals(""));
+            list.add(new IgnoredPathStarts("/"));
+            return list;
+        }
+        /*
+         * 正则忽略
+         */
+        if (ignoredPath.startsWith("regex:")) {
+            list.add(new IgnoredPathRegexMatch(ignoredPath.substring("regex:".length())));
+            return list;
+        }
+
+        // 补全
+        if (ignoredPath.length() > 0 && !ignoredPath.startsWith("/") && !ignoredPath.startsWith("*")) {
+            ignoredPath = "/" + ignoredPath;
+        }
+        //
+        if (ignoredPath.endsWith("*")) {
+            list.add(new IgnoredPathStarts(ignoredPath.substring(0, ignoredPath.length() - 1)));
+        } else if (ignoredPath.startsWith("*")) {
+            list.add(new IgnoredPathEnds(ignoredPath.substring(1)));
+        } else {
+            list.add(new IgnoredPathEquals(ignoredPath));
+        }
+        //
+        return list;
     }
 
     /**
@@ -193,32 +205,6 @@ public class RoseBootFilter extends GenericFilterBean {
             synchronized (window) {
                 window.notifyAll();
             }
-        }
-    }
-
-    protected void removeMvc(List<Module> modules) {
-        final Iterator<Module> iterator = modules.iterator();
-        for (; iterator.hasNext();) {
-            final Module module = iterator.next();
-
-            final List<ControllerRef> rmControllers = new ArrayList<>();
-            final List<ControllerRef> controllers = module.getControllers();
-            final Iterator<ControllerRef> controllerRefIterator = controllers.iterator();
-            for (; controllerRefIterator.hasNext();) {
-                final ControllerRef controllerRef = controllerRefIterator.next();
-                final Class<?> controllerClass = controllerRef.getControllerClass();
-                if (null != controllerClass.getAnnotation(Controller.class)
-                        || null != controllerClass.getAnnotation(RestController.class)) {
-                    rmControllers.add(controllerRef);
-                }
-            }
-
-            controllers.removeAll(rmControllers);
-
-            // if (module.getControllers().isEmpty()){
-            // modules.remove(module);
-            // }
-
         }
     }
 

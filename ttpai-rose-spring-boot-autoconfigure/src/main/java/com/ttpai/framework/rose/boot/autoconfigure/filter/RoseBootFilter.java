@@ -173,6 +173,30 @@ public class RoseBootFilter extends GenericFilterBean {
         this.ignoredPaths = paths;
     }
 
+    /**
+     * @see net.paoding.rose.web.portal.impl.PortalWaitInterceptor#waitForWindows
+     * @see net.paoding.rose.web.portal.impl.PortalWaitInterceptor
+     */
+    protected void supportsRosePipe(final HttpServletRequest httpRequest) {
+        // 这个代码为 rosepipe 所用，以避免 rosepipe 的"Cannot forward after response has been committed"异常
+        Object window = httpRequest.getAttribute(RoseConstants.WINDOW_ATTR);
+        if (window != null && window.getClass().getName().startsWith("net.paoding.rose.web.portal")) {
+            httpRequest.setAttribute(RoseConstants.PIPE_WINDOW_IN, Boolean.TRUE);
+
+            if (log.isDebugEnabled()) {
+                try {
+                    log.debug("notify window '{}'", httpRequest.getAttribute("$$paoding-rose-portal.window.name"));
+                } catch (Exception e) {
+                    log.error("", e);
+                }
+            }
+            synchronized (window) {
+                window.notifyAll();
+            }
+        }
+    }
+
+
 
     protected void removeMvc(List<Module> modules) {
         final Iterator<Module> iterator = modules.iterator();

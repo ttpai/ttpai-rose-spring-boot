@@ -5,7 +5,6 @@ import net.paoding.rose.RoseFilter;
 import net.paoding.rose.RoseVersion;
 import net.paoding.rose.scanner.ModuleResource;
 import net.paoding.rose.scanner.ModuleResourceProvider;
-import net.paoding.rose.scanner.ModuleResourceProviderImpl;
 import net.paoding.rose.scanning.LoadScope;
 import net.paoding.rose.util.PrinteHelper;
 import net.paoding.rose.web.annotation.ReqMethod;
@@ -15,15 +14,14 @@ import net.paoding.rose.web.impl.mapping.MappingNode;
 import net.paoding.rose.web.impl.mapping.TreeBuilder;
 import net.paoding.rose.web.impl.module.Module;
 import net.paoding.rose.web.impl.module.ModulesBuilder;
-import net.paoding.rose.web.impl.module.ModulesBuilderImpl;
 import net.paoding.rose.web.impl.thread.LinkedEngine;
 import net.paoding.rose.web.impl.thread.RootEngine;
 import net.paoding.rose.web.instruction.InstructionExecutor;
-import net.paoding.rose.web.instruction.InstructionExecutorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
@@ -31,7 +29,7 @@ import java.util.List;
 
 /**
  * @see RoseFilter#initFilterBean()
- *      * * * * * * *
+ * * * * * * * *
  * @see RoseFilter#prepareRootApplicationContext()
  * @see RoseFilter#prepareModules(WebApplicationContext)
  * @see RoseFilter#prepareMappingTree(List)
@@ -51,12 +49,6 @@ public class RoseModulesFinder implements InitializingBean {
     private MappingNode mappingTree;
 
     private final LoadScope load = new LoadScope("", "controllers");
-
-    private final Class<? extends ModuleResourceProvider> moduleResourceProviderClass = ModuleResourceProviderImpl.class;
-
-    private final Class<? extends ModulesBuilder> modulesBuilderClass = ModulesBuilderImpl.class;
-
-    private final InstructionExecutor instructionExecutor = new InstructionExecutorImpl();
 
     /**
      * @see RoseFilter#prepareModules(WebApplicationContext)
@@ -94,7 +86,8 @@ public class RoseModulesFinder implements InitializingBean {
             logger.info("[init/mudule] starting ...");
         }
 
-        ModuleResourceProvider provider = moduleResourceProviderClass.newInstance();
+
+        ModuleResourceProvider provider = this.springFactoriesFindFirst(ModuleResourceProvider.class);
 
         if (logger.isInfoEnabled()) {
             logger.info("[init/module] using provider: {}", provider);
@@ -107,7 +100,7 @@ public class RoseModulesFinder implements InitializingBean {
             logger.info("[init/mudule] exits 'moduleResource'");
         }
 
-        ModulesBuilder modulesBuilder = modulesBuilderClass.newInstance();
+        ModulesBuilder modulesBuilder = this.springFactoriesFindFirst(ModulesBuilder.class);
 
         if (logger.isInfoEnabled()) {
             logger.info("[init/module] using modulesBuilder: {}", modulesBuilder);
@@ -124,9 +117,11 @@ public class RoseModulesFinder implements InitializingBean {
         return findModules;
     }
 
-    private MappingNode prepareMappingTree(List<Module> modules) {
+    protected MappingNode prepareMappingTree(List<Module> modules) {
         Mapping rootMapping = new ConstantMapping("");
         MappingNode mappingNode = new MappingNode(rootMapping);
+
+        final InstructionExecutor instructionExecutor = this.springFactoriesFindFirst(InstructionExecutor.class);
         LinkedEngine rootEngine = new LinkedEngine(null, new RootEngine(instructionExecutor), mappingNode);
         mappingNode.getMiddleEngines().addEngine(ReqMethod.ALL, rootEngine);
 
@@ -135,4 +130,20 @@ public class RoseModulesFinder implements InitializingBean {
 
         return mappingNode;
     }
+
+    protected <T> T springFactoriesFindFirst(Class<T> clazz) {
+        final List<T> resourceProviders = SpringFactoriesLoader.loadFactories(
+                clazz, Thread.currentThread().getContextClassLoader()
+        );
+        if (resourceProviders.isEmpty()) {
+            throw new IllegalArgumentException("SpringFactoriesLoader not Found " + clazz.getName());
+        }
+        final T instance = resourceProviders.get(0);
+        if (resourceProviders.size() > 1) {
+            logger.warn("SpringFactoriesLoader find Multi {}, Use {}", clazz.getName(), instance.getClass().getName());
+        }
+        return instance;
+    }
+
+
 }

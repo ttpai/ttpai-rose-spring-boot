@@ -1,6 +1,5 @@
 package com.ttpai.framework.rose.boot.autoconfigure.config;
 
-
 import net.paoding.rose.web.impl.module.Module;
 import org.junit.Test;
 import org.junit.runner.RunWith;

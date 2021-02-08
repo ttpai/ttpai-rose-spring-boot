@@ -36,7 +36,7 @@ public class RoseBootFilter extends GenericFilterBean {
         this.roseTree = roseTree;
     }
 
-    private IgnoredPath[] ignoredPaths = new IgnoredPath[]{
+    private IgnoredPath[] ignoredPaths = new IgnoredPath[] {
             new IgnoredPathStarts(RoseConstants.VIEWS_PATH_WITH_END_SEP),
             new IgnoredPathEquals("/favicon.ico")
     };

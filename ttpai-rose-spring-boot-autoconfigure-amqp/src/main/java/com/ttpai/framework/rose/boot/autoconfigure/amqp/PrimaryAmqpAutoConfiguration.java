@@ -1,6 +1,7 @@
 package com.ttpai.framework.rose.boot.autoconfigure.amqp;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class PrimaryAmqpAutoConfiguration {
 
     @Bean
+    @ConditionalOnProperty(name = "rose.boot.autoconfigure.amqp.primary", havingValue = "true", matchIfMissing = true)
     @ConditionalOnClass(name = "org.springframework.amqp.rabbit.connection.ConnectionFactory")
     public PrimaryAmqpFactoryPostProcessor primaryAmqpFactoryPostProcessor() {
         return new PrimaryAmqpFactoryPostProcessor();

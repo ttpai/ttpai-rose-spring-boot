@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.core.io.support.ResourcePatternResolver;
 
 import javax.servlet.DispatcherType;
 import java.util.Arrays;
@@ -25,7 +24,11 @@ import java.util.EnumSet;
  */
 @Lazy(value = false)
 @Configuration
-@ImportResource(ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + "**/applicationContext*.xml")
+@ImportResource({
+        "classpath*:applicationContext*.xml", //
+        "classpath*:applicationContext-rose.xml", // Resin 下必须明确文件名（原因未知）
+        "classpath*:applicationContext-jade.xml", // Resin 下必须明确文件名（原因未知）
+})
 public class RoseAutoConfiguration {
 
     /**

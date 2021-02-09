@@ -24,7 +24,7 @@ import java.util.EnumSet;
  */
 @Lazy(value = false)
 @Configuration
-@ImportResource("classpath*:applicationContext*.xml")
+@ImportResource("classpath*:**/applicationContext*.xml")
 public class RoseAutoConfiguration {
 
     /**

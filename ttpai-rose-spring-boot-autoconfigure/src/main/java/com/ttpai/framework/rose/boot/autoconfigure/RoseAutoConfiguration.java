@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Lazy;
 
 import javax.servlet.DispatcherType;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import java.util.EnumSet;
  * <p>
  * 2. 配置 roseBootFilterRegistration
  */
+@Lazy(value = false)
 @Configuration
 @ImportResource("classpath*:applicationContext*.xml")
 public class RoseAutoConfiguration {
@@ -35,6 +37,7 @@ public class RoseAutoConfiguration {
     private String ignorePaths;
 
     @Bean
+    @Lazy(value = false)
     @ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
     public RoseModulesFinder roseModulesFinder() {
         return new RoseModulesFinder();

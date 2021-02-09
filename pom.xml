@@ -18,6 +18,7 @@
         <module>ttpai-rose-spring-boot-starter</module>
         <module>ttpai-rose-spring-boot-autoconfigure</module>
         <module>ttpai-rose-spring-boot-example</module>
+        <module>ttpai-rose-spring-boot-autoconfigure-amqp</module>
     </modules>
 
     <properties>

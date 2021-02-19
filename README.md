@@ -12,3 +12,4 @@
 
 - 支持 Rose 迁移 Spring Boot 初始版本
 - 接入文档： http://confluence.ttpai.cn/pages/viewpage.action?pageId=9592094
+- 示例： ttpai-rose-spring-boot-example

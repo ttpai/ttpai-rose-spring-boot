@@ -41,10 +41,10 @@ class RoseAutoConfiguration {
     /**
      * 自定义过滤的 Url，可自定义哪些链接经过 Rose 过滤器
      */
-    @Value("${rose.boot.filter.patterns:/*}")
+    @Value("${ttpai.rose.boot.filter.patterns:/*}")
     private String patterns;
 
-    @Value("${rose.boot.filter.ignore.paths:}")
+    @Value("${ttpai.rose.boot.filter.ignore.paths:}")
     private String ignorePaths;
 
     @Bean

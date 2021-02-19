@@ -1,13 +1,13 @@
 {
   "properties": [
     {
-      "name": "rose.boot.filter.patterns",
+      "name": "ttpai.rose.boot.filter.patterns",
       "type": "java.lang.String",
       "description": "自定义过滤的 Url，可自定义哪些链接经过 Rose 过滤器（多个的话 逗号 分割）",
       "defaultValue": "/*"
     },
     {
-      "name": "rose.boot.filter.ignore.paths",
+      "name": "ttpai.rose.boot.filter.ignore.paths",
       "type": "java.lang.String",
       "description": "自定义忽略的 Url（多个的话 逗号 分割）",
       "defaultValue": ""

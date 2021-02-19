@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class PrimaryAmqpAutoConfiguration {
 
     @Bean
-    @ConditionalOnProperty(name = "rose.boot.autoconfigure.amqp.primary", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = "ttpai.rose.boot.autoconfigure.amqp.primary", havingValue = "true", matchIfMissing = true)
     @ConditionalOnClass(name = "org.springframework.amqp.rabbit.connection.ConnectionFactory")
     public PrimaryAmqpFactoryPostProcessor primaryAmqpFactoryPostProcessor() {
         return new PrimaryAmqpFactoryPostProcessor();

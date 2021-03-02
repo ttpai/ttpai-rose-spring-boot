@@ -34,6 +34,7 @@ public class ExampleRoseController {
 
     @Get("/jsp")
     public String jsp(HttpServletRequest request) {
+        request.setAttribute("framework", "Rose");
         request.setAttribute("message", System.currentTimeMillis());
         return "index";
     }

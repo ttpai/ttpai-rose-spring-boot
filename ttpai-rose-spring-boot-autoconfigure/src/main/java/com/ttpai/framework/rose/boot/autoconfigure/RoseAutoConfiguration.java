@@ -26,8 +26,6 @@ import java.util.EnumSet;
  * @see PathMatchingResourcePatternResolver#addAllClassLoaderJarRoots 【jar:jar: 双重拼接】
  * @see net.paoding.rose.scanning.context.RoseWebAppContext#getConfigResourcesThrows 【自定义实现，资源扫描】
  */
-@Lazy(value = false)
-@Configuration
 @ImportResource({
         "classpath*:applicationContext*.xml", //
         // Resin 下必须明确文件名，使用通配符 PathMatchingResourcePatternResolver 无法匹配 jar 包中的文件
@@ -70,7 +68,6 @@ class RoseAutoConfiguration {
      * Rose 过滤器
      */
     @Bean
-    @Lazy(value = false)
     @ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
     public FilterRegistrationBean roseBootFilterRegistration(RoseBootFilter filter) {
         FilterRegistrationBean bean = new FilterRegistrationBean();

@@ -4,12 +4,14 @@ import com.ttpai.framework.rose.boot.autoconfigure.config.RoseModulesFinder;
 import com.ttpai.framework.rose.boot.autoconfigure.filter.RoseBootFilter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.servlet.DispatcherType;
@@ -26,6 +28,7 @@ import java.util.EnumSet;
  * @see PathMatchingResourcePatternResolver#addAllClassLoaderJarRoots 【jar:jar: 双重拼接】
  * @see net.paoding.rose.scanning.context.RoseWebAppContext#getConfigResourcesThrows 【自定义实现，资源扫描】
  */
+
 @ImportResource({
         "classpath*:applicationContext*.xml", //
         // Resin 下必须明确文件名，使用通配符 PathMatchingResourcePatternResolver 无法匹配 jar 包中的文件
@@ -34,6 +37,8 @@ import java.util.EnumSet;
         "classpath*:applicationContext-rose.xml", //
         "classpath*:applicationContext-jade.xml", //
 })
+// 默认是最低优先级，这里定义一个顺序，把 ImportResource 的加载拉的靠前一些
+@AutoConfigureOrder(0)
 class RoseAutoConfiguration {
 
     /**

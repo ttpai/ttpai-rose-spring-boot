@@ -19,6 +19,7 @@ import java.util.EnumSet;
  * 配置 roseBootFilterRegistration
  */
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE - 100)
+@ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
 class RoseAutoConfiguration {
 
     /**
@@ -31,7 +32,6 @@ class RoseAutoConfiguration {
     private String ignorePaths;
 
     @Bean
-    @ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
     public RoseModulesFinder roseModulesFinder() {
         return new RoseModulesFinder();
     }
@@ -40,7 +40,6 @@ class RoseAutoConfiguration {
      * 自定义 Rose 过滤器
      */
     @Bean
-    @ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
     public RoseBootFilter roseBootFilter(RoseModulesFinder modules) {
         final RoseBootFilter roseBootFilter = new RoseBootFilter(modules);
         if (StringUtils.isNotBlank(ignorePaths)) {
@@ -55,7 +54,6 @@ class RoseAutoConfiguration {
      * @see ServletContextInitializer
      */
     @Bean
-    @ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
     public FilterRegistrationBean roseBootFilterRegistration(RoseBootFilter filter) {
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setFilter(filter);

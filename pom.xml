@@ -30,7 +30,7 @@
 
         <repository>
             <id>ttpai-public</id>
-            <url>http://172.16.2.101:8081/nexus/content/groups/public/</url>
+            <url>http://maven.ttpai.cn:8081/nexus/content/groups/public/</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>

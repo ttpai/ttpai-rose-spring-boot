@@ -5,37 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ttpai.framework</groupId>
-        <artifactId>ttpai-parent</artifactId>
-        <version>1.3.9</version>
+        <groupId>cn.ttpai.framework</groupId>
+        <artifactId>ttpai-parent1</artifactId>
+        <version>2.2.3</version>
     </parent>
 
     <artifactId>ttpai-rose-spring-boot</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>ttpai-rose-spring-boot-starter</module>
         <module>ttpai-rose-spring-boot-autoconfigure</module>
-        <module>ttpai-rose-spring-boot-example</module>
         <module>ttpai-rose-spring-boot-autoconfigure-amqp</module>
+        <!-- 示例项目 -->
+        <module>ttpai-rose-spring-boot-example</module>
     </modules>
 
     <properties>
         <!-- 无需依赖管理 -->
         <ttpai-dependencies.skip>true</ttpai-dependencies.skip>
     </properties>
-
-    <repositories>
-
-        <repository>
-            <id>ttpai-public</id>
-            <url>http://maven.ttpai.cn:8081/nexus/content/groups/public/</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-
-    </repositories>
 
 </project>

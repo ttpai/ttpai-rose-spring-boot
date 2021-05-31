@@ -4,20 +4,23 @@ import com.ttpai.framework.rose.boot.autoconfigure.config.RoseModulesFinder;
 import com.ttpai.framework.rose.boot.autoconfigure.filter.RoseBootFilter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
+import zzz.ZAutoConfiguration;
 
 import javax.servlet.DispatcherType;
 import java.util.Arrays;
 import java.util.EnumSet;
 
 /**
- * 配置 roseBootFilterRegistration
+ * 配置 roseBootFilterRegistration，该类的加载顺序应该尽量靠后
  */
+@AutoConfigureAfter(ZAutoConfiguration.class)
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE - 100)
 @ConditionalOnClass(name = "net.paoding.rose.RoseFilter")
 class RoseAutoConfiguration {

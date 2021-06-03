@@ -6,11 +6,9 @@
 
 ## 版本
 
-### v1.0.0
+### v1.0.2 2021-06-03
 
-- 支持 Rose 迁移 Spring Boot 初始版本
-- 接入文档： http://confluence.ttpai.cn/pages/viewpage.action?pageId=9592094
-- 示例： ttpai-rose-spring-boot-example
+- AutoConfig 顺序优化，提高兼容性
 
 ### v1.0.1 2021-03-19
 
@@ -20,3 +18,9 @@
         1. 【-100】`RoseAutoConfigurationResource` >> .xml 配置文件先解析，便于后续获取 Bean 的条件定义
         2. 【0】`MyBatisMultiDataSourceProcessorConfigure` >> 条件注解，获取 DataSource 的定义，扫描 Mapper 等，解决 Rose 对 Mapper 的依赖
         3. 【100】`RoseAutoConfiguration` >> 初始化 Rose
+
+### v1.0.0
+
+- 支持 Rose 迁移 Spring Boot 初始版本
+- 接入文档： http://confluence.ttpai.cn/pages/viewpage.action?pageId=9592094
+- 示例： ttpai-rose-spring-boot-example

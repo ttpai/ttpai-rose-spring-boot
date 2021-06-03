@@ -34,6 +34,9 @@ public class BootModuleResourceProvider extends ModuleResourceProviderImpl {
 
     /**
      * 查找 Spring MVC 的 Controller
+     *
+     * @param controllers Controller 列表
+     * @return Spring Mvc Controller 列表
      */
     protected List<Class<?>> findSpringMvcController(List<Class<?>> controllers) {
         List<Class<?>> springMvcController = new ArrayList<>();
@@ -49,6 +52,7 @@ public class BootModuleResourceProvider extends ModuleResourceProviderImpl {
     /**
      * 判断该类是否是 Spring Mvc【条件 Controller || RestController 存在】
      *
+     * @param clazz 判断一个类是否是 Spring MVC Controller
      * @see Controller
      * @see RestController
      */

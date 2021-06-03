@@ -27,4 +27,38 @@
         <ttpai-dependencies.skip>true</ttpai-dependencies.skip>
     </properties>
 
+    <name>${project.artifactId}</name>
+    <description>Paoding Rose to Spring Boot</description>
+    <url>https://github.com/ttpai/ttpai-rose-spring-boot</url>
+
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/ttpai/ttpai-rose-spring-boot</url>
+        <connection>https://github.com/ttpai/ttpai-rose-spring-boot.git</connection>
+        <developerConnection>https://github.com/ttpai/ttpai-rose-spring-boot</developerConnection>
+    </scm>
+
+    <developers>
+
+        <developer>
+            <name>ttpai</name>
+            <email>github@ttpai.cn</email>
+            <url>https://www.ttpai.cn</url>
+        </developer>
+
+        <developer>
+            <name>kailbin</name>
+            <email>ykb553@163.com</email>
+            <url>https://github.com/kailbin</url>
+        </developer>
+
+    </developers>
+
 </project>

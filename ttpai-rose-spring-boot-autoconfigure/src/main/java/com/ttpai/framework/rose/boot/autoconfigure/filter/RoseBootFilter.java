@@ -86,6 +86,9 @@ public class RoseBootFilter extends GenericFilterBean {
 
     /**
      * 简单、快速判断本次请求
+     *
+     * @param requestPath 当前路径
+     * @return 是够应该被忽略
      */
     protected boolean quicklyPass(final RequestPath requestPath) {
         for (IgnoredPath ignoredPath : ignoredPaths) {
@@ -98,6 +101,9 @@ public class RoseBootFilter extends GenericFilterBean {
 
     /**
      * 抛出异常，打印异常信息
+     *
+     * @param requestPath 请求路径
+     * @param exception   异常信息
      */
     protected void throwServletException(RequestPath requestPath, Throwable exception) throws ServletException {
         String msg = requestPath.getMethod() + " " + requestPath.getUri();
@@ -186,8 +192,8 @@ public class RoseBootFilter extends GenericFilterBean {
     }
 
     /**
-     * @see net.paoding.rose.web.portal.impl.PortalWaitInterceptor#waitForWindows
-     * @see net.paoding.rose.web.portal.impl.PortalWaitInterceptor
+     * $see net.paoding.rose.web.portal.impl.PortalWaitInterceptor#waitForWindows
+     * $see net.paoding.rose.web.portal.impl.PortalWaitInterceptor
      */
     protected void supportsRosePipe(final HttpServletRequest httpRequest) {
         // 这个代码为 rosepipe 所用，以避免 rosepipe 的"Cannot forward after response has been committed"异常
